@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# bookchaowalit-journal-frontend
+
+A beautiful, personal journal application built with Next.js, featuring mood tracking, timeline views, and calendar integration.
+
+## Features
+
+- **Timeline View**: See your journal entries organized by date with a visual timeline
+- **Mood Tracking**: Track and visualize your moods over time with color-coded entries
+- **Calendar View**: Navigate your entries with an interactive calendar
+- **Search & Filter**: Find entries by mood, tags, or content
+- **MCP API**: Programmatic access to your journal entries via Model Context Protocol
+- **Responsive Design**: Works beautifully on all devices
+- **Markdown Support**: Write entries in Markdown with frontmatter metadata
+
+## Project Structure
+
+```
+bookchaowalit-journal-frontend/
+├── app/                    # Next.js app router
+│   ├── api/mcp/           # MCP API endpoints
+│   ├── calendar/          # Calendar view page
+│   ├── journal/           # Journal pages
+│   │   ├── [slug]/        # Individual entry pages
+│   └── page.tsx           # Homepage with timeline
+├── content/journal/       # Journal entries (MDX files)
+├── lib/mdx.ts            # MDX utilities and data fetching
+└── next.config.ts        # Next.js configuration
+```
+
+## Entry Format
+
+Journal entries are stored as MDX files in `content/journal/` with frontmatter:
+
+```mdx
+---
+title: My Day
+date: 2026-02-22
+mood: happy
+tags: [gratitude, morning-thoughts]
+---
+
+# My Day
+
+Today was a great day...
+```
+
+## API Endpoints
+
+The app includes MCP (Model Context Protocol) API endpoints at `/api/mcp`:
+
+- `get_entries` - Get all entries with optional filters
+- `get_entry_by_slug` - Get a specific entry
+- `get_entries_by_date` - Get entries by date range
+- `get_moods` - Get all unique moods
+- `search_entries` - Search journal content
 
 ## Getting Started
 
-First, run the development server:
-
+1. Install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Run the development server:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Building for Production
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run build
+npm start
+```
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Technologies Used
+
+- [Next.js](https://nextjs.org) - React framework
+- [TypeScript](https://www.typescriptlang.org) - Type safety
+- [Tailwind CSS](https://tailwindcss.com) - Styling
+- [MDX](https://mdxjs.com) - Markdown with React components
+- [gray-matter](https://github.com/jonschlinkert/gray-matter) - Frontmatter parsing
+- [date-fns](https://date-fns.org) - Date manipulation
+- [Lucide React](https://lucide.dev) - Icons
