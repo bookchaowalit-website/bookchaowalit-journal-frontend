@@ -90,3 +90,9 @@ Check out the [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - [gray-matter](https://github.com/jonschlinkert/gray-matter) - Frontmatter parsing
 - [date-fns](https://date-fns.org) - Date manipulation
 - [Lucide React](https://lucide.dev) - Icons
+
+## Related
+
+- **Mobile App:** [bookchaowalit-journal-mobile](https://github.com/bookchaowalit-mobile/bookchaowalit-journal-mobile)
+- **Portfolio:** [bookchaowalit.com](https://bookchaowalit.com)
+
