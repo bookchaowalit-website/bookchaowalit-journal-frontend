@@ -1,129 +1,20 @@
-import { getJournalEntries, getMoods } from '@/lib/mdx'
-import Link from 'next/link'
+import Link from "next/link";
+import { getJournalEntries, getMoods } from "@/lib/mdx";
 
-interface JournalEntry {
-  slug: string
-  title: string
-  date: string
-  mood: string
-  tags: string[]
-  content: string
-}
-
-const moodColors: Record<string, string> = {
-  happy: 'bg-yellow-100 border-yellow-400',
-  productive: 'bg-green-100 border-green-400',
-  reflective: 'bg-blue-100 border-blue-400',
-  excited: 'bg-pink-100 border-pink-400',
-  frustrated: 'bg-red-100 border-red-400',
-  grateful: 'bg-purple-100 border-purple-400',
-  calm: 'bg-teal-100 border-teal-400'
-}
-
-const moodIcons: Record<string, string> = {
-  happy: '😊',
-  productive: '💪',
-  reflective: '🤔',
-  excited: '🎉',
-  frustrated: '😤',
-  grateful: '🙏',
-  calm: '😌'
-}
+const moodClass: Record<string, string> = { happy: "mood-sun", productive: "mood-leaf", reflective: "mood-water", excited: "mood-coral", frustrated: "mood-ink", grateful: "mood-violet", calm: "mood-moss" };
+function formatDate(value: string) { return new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" }).format(new Date(value)); }
 
 export default async function HomePage() {
-  const entries = await getJournalEntries()
-  const moods = await getMoods() || []
-
-  const moodStats = (moods || []).map(mood => ({
-    mood,
-    count: entries.filter(e => e.mood === mood).length
-  }))
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-gray-900">My Journal</h1>
-            <nav className="space-x-4">
-              <Link href="/journal" className="text-gray-600 hover:text-gray-900">
-                All Entries
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-        {/* Mood Summary */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Mood Overview</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {moodStats.map(({ mood, count }) => (
-              <div
-                key={mood}
-                className={`${moodColors[mood] || 'bg-gray-100 border-gray-300'} rounded-lg p-4 border-2 text-center`}
-              >
-                <div className="text-2xl mb-2">{moodIcons[mood] || '📝'}</div>
-                <div className="font-medium capitalize">{mood}</div>
-                <div className="text-sm text-gray-600">{count} entries</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Recent Entries */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Recent Entries</h2>
-          {entries.length > 0 ? (
-            <div className="space-y-4">
-              {entries.slice(0, 5).map(entry => (
-                <Link
-                  key={entry.slug}
-                  href={`/journal/${entry.slug}`}
-                  className={`block p-4 rounded-lg hover:shadow-md transition-shadow ${
-                    moodColors[entry.mood] || 'bg-gray-100'
-                  }`}
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h3 className="font-medium">{entry.title}</h3>
-                      <p className="text-sm text-gray-600 mt-1">
-                        {new Date(entry.date).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })} • {entry.mood}
-                      </p>
-                      <div className="flex gap-2 mt-2">
-                        {entry.tags && Array.isArray(entry.tags) && entry.tags.map(tag => (
-                          <span
-                            key={tag}
-                            className="px-2 py-1 bg-white bg-opacity-60 rounded text-xs"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <span className="text-2xl ml-4">{moodIcons[entry.mood] || '📝'}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              No journal entries yet. Start writing your first entry!
-            </div>
-          )}
-          <Link
-            href="/journal"
-            className="block text-center mt-4 text-blue-600 hover:text-blue-800"
-          >
-            View all entries →
-          </Link>
-        </section>
-      </main>
-    </div>
-  )
+  const entries = await getJournalEntries();
+  const moods = await getMoods();
+  const latest = entries[0];
+  return <main className="field-shell">
+    <header className="field-header"><Link className="field-wordmark" href="/">BOOK / FIELD NOTES</Link><nav><Link href="/journal">Archive</Link><a href="#about">About this notebook</a></nav></header>
+    <div className="field-spine" aria-hidden="true" />
+    <section className="field-intro"><div className="intro-label"><span>PERSONAL OBSERVATION LOG</span><span>VOL. 01 / 2026</span></div><div className="intro-grid"><h1>Notes from<br /><em>the middle.</em></h1><div className="intro-note"><p>One place to notice the work, moods, friction, and small evidence of a life in progress.</p><Link className="text-link" href="/journal">Read the full field log <span>↗</span></Link></div></div></section>
+    {latest && <section className="featured-note"><div className="date-stamp"><span>LATEST NOTE</span><strong>{formatDate(latest.date)}</strong><i className={moodClass[latest.mood] || "mood-ink"} /> <span>{latest.mood}</span></div><div className="featured-copy"><span className="rule-number">01</span><div><h2>{latest.title}</h2><p>{latest.content.replace(/[#*_\n]/g, " ").slice(0, 260)}…</p><Link className="text-link" href={`/journal/${latest.slug}`}>Open entry <span>→</span></Link></div></div></section>}
+    <section className="mood-register"><div><span className="section-label">OBSERVATIONS BY WEATHER</span><h2>The mood register</h2></div><div className="mood-list">{moods.map((mood) => <div key={mood}><i className={moodClass[mood] || "mood-ink"} /><span>{mood}</span><strong>{entries.filter((entry) => entry.mood === mood).length}</strong></div>)}</div></section>
+    <section className="timeline-preview"><div className="section-heading"><div><span className="section-label">RECENT ARRIVALS</span><h2>On the page</h2></div><Link className="text-link" href="/journal">View archive <span>↗</span></Link></div><div className="timeline-list">{entries.slice(0, 5).map((entry, index) => <Link className="timeline-row" key={entry.slug} href={`/journal/${entry.slug}`}><span className="timeline-date">{formatDate(entry.date)}</span><span className={`timeline-dot ${moodClass[entry.mood] || "mood-ink"}`} /><span className="timeline-title">{entry.title}</span><span className="timeline-mood">{entry.mood}</span><span className="timeline-arrow">↗</span></Link>)}</div></section>
+    <footer id="about" className="field-footer"><span>BOOKCHAOWALIT / PRIVATE NOTEBOOK</span><span>Written to understand, not to perform.</span></footer>
+  </main>;
 }
